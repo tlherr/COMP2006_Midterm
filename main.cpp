@@ -89,12 +89,12 @@ RomanNumeral getRomanInput() {
 int getBase10Input() {
     int input;
     for(;;) {
-        cout << "Enter a base 10 integer";
+        cout << "Input the base 10 number (< 9999 and > 0): ";
 
         cin >> input;
 
         if(!cin.fail()) {
-            if(input>0) {
+            if(input>0&&input<9999) {
                 break;
             } else {
                 cout << "Invalid Input, please try again" << endl;
@@ -201,10 +201,55 @@ void RomanToBase10(RomanNumeral input) {
 }
 
 /**
- * Use modulus in this to get largest possible numbers that will divide
+ * Given a base 10 number return a RomanNumeral equivilent
+ *
+ * @param input int Base 10 user number
+ * //2349
  */
-void Base10ToRoman() {
+void Base10ToRoman(int input) {
 
+    RomanNumeral result;
+    int value_left = input;
+
+    //Want to keep going until value left is zero
+
+    do  {
+        cout << "Value Left: " << value_left << endl;
+        if(value_left-1000>0) {
+            cout << "Number is divisible by 1000, add an M" << endl;
+            result.expression+='M';
+            value_left = value_left - 1000;
+        } else if(value_left-500>0) {
+            cout << "Number is divisible by 500, add a D" << endl;
+            result.expression+='D';
+            value_left = value_left - 500;
+        } else if(value_left-100>0) {
+            cout << "Number is divisible by 100, add a C" << endl;
+            result.expression+='C';
+            value_left = value_left - 100;
+        } else if(value_left-50>0) {
+            cout << "Number is divisible by 50, add an L" << endl;
+            result.expression+='L';
+            value_left = value_left - 50;
+        } else if(value_left-10>0) {
+            cout << "Number is divisible by 10, add an X" << endl;
+            result.expression+='X';
+            value_left = value_left - 10;
+        } else if(value_left-5>0) {
+            cout << "Number is divisible by 5, add an V" << endl;
+            result.expression+='V';
+            value_left = value_left - 5;
+        } else if(value_left-1>0) {
+            cout << "Number is divisible by 1, add an I" << endl;
+            result.expression+='I';
+            value_left = value_left - 1;
+        } else {
+            value_left=0;
+        }
+    } while(value_left>0);
+
+
+    cout << "Result before substituting subtractives: " << result.expression << endl;
 }
 
 void RomanAddition() {
@@ -242,7 +287,7 @@ int main() {
             RomanToBase10(getRomanInput());
             break;
         case 2:
-            Base10ToRoman();
+            Base10ToRoman(getBase10Input());
             break;
         case 3:
             RomanAddition();
