@@ -200,6 +200,55 @@ void RomanToBase10(RomanNumeral input) {
     cout << "In Base 10 this is: " << total << endl;
 }
 
+void RomanAddition() {
+
+}
+
+/**
+ * Look for repeat of symbols (Groups of 4)
+ * To do this we proceed right-to-left and look for four of the same symbol.
+ *
+ * @param input
+ */
+void RemoveSubstractives(RomanNumeral &input) {
+    //MMCCCXXXXVIIII
+    char prev;
+    int streak = 0;
+
+    for(unsigned int i=0; i<input.expression.length(); i++) {
+        char current = input.expression.at(i);
+        cout << "Current Character: " << current << endl;
+        //cout << "Current Streak: " << streak << endl;
+
+        if(i==0) {
+            prev=current;
+        } else {
+            cout << "Previous Character: " << prev << endl;
+            //Check if our current symbol matches our previous one
+            if(current==prev) {
+                streak++;
+                cout << "Matches Previous Character. Adding to streak " << streak << endl;
+            } else {
+                //cout << "No Match. Resettting Streak Counter" << endl;
+                streak=0;
+            }
+
+            prev=current;
+        }
+
+        if(streak==3) {
+            //We have a viable sub
+            cout << "Viable Substitution found" << endl;
+        }
+    }
+
+
+}
+
+void AddSubstractives(RomanNumeral &input) {
+
+}
+
 /**
  * Given a base 10 number return a RomanNumeral equivilent
  *
@@ -244,26 +293,15 @@ void Base10ToRoman(int input) {
             result.expression+='I';
             value_left = value_left - 1;
         } else {
+            result.expression+='I';
             value_left=0;
         }
     } while(value_left>0);
 
 
     cout << "Result before substituting subtractives: " << result.expression << endl;
+    RemoveSubstractives(result);
 }
-
-void RomanAddition() {
-
-}
-
-void RemoveSubstractives() {
-
-}
-
-void AddSubstractives() {
-
-}
-
 
 
 int main() {
