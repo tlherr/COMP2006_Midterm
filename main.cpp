@@ -8,6 +8,26 @@ using namespace std;
 #include <string>
 #include <cstdio>
 
+struct RomanNumeral {
+    string expression;
+    bool isValid() {
+        bool valid = true;
+        //Check if the expression is valid
+        for(unsigned int i=0; i<expression.length(); i++) {
+            char current = expression.at(i);
+            if(current=='I'||current=='V'||current=='X'||current=='L'||current=='C'||current=='D'||current=='M') {
+                //Do nothing. Characters are valid
+            } else {
+                cout << "Invalid character found at position: " << i << endl;
+                valid = false;
+            }
+        }
+        return valid;
+    }
+};
+
+
+
 /**
  * Loop to get user input
  * @return
@@ -34,11 +54,98 @@ int get_selection() {
         }
     }
 }
+/**
+ * Get input from user for Roman Numeral to operate on
+ * @return RomanNumeral struct containing data
+ */
+RomanNumeral getRomanInput() {
+    cout << "Input the Roman number: ";
 
-void RomanToBase10() {
+    RomanNumeral input;
 
+    for(;;) {
+        cin >> input.expression;
+
+        if(!cin.fail()) {
+            if(input.isValid()) {
+                break;
+            } else {
+                cout << "Invalid input, please try again" << endl;
+            }
+        } else {
+            cout << "Invalid input, please try again" << endl;
+        }
+    }
+
+
+    return input;
 }
 
+/**
+ * Get user input in the form of a base 10 number
+ * @return int Base 10 integer user has input
+ */
+int getBase10Input() {
+    int input;
+    for(;;) {
+        cout << "Enter a base 10 integer";
+
+        cin >> input;
+
+        if(!cin.fail()) {
+            if(input>0) {
+                break;
+            } else {
+                cout << "Invalid Input, please try again" << endl;
+            }
+        } else {
+            cout << "Invalid Input, please try again" << endl;
+        }
+    }
+
+    return input;
+}
+
+
+/**
+ * Convert roman numeral into Base 10 integer
+ * I	V	X	L	C	D	M
+ * 1	5	10	50	100	500	1000
+ * @param input RomanNumeral
+ * @return int Base 10 equivilent
+ */
+int RomanToBase10(RomanNumeral input) {
+
+    int total = 0;
+    for(unsigned int i=0; i<input.expression.length(); i++) {
+        char current = input.expression.at(i);
+
+        switch(current) {
+            case 'I':
+                total+=1;
+            case 'V':
+                total+=5;
+            case 'X':
+                total+=10;
+            case 'L':
+                total+=50;
+            case 'C':
+                total+=100;
+            case 'D':
+                total+=500;
+            case 'M':
+                total+=1000;
+            default:
+                cout << "Invalid Character Detected at position " << i << endl;
+        }
+    }
+
+    return total;
+}
+
+/**
+ * Use modulus in this to get largest possible numbers that will divide
+ */
 void Base10ToRoman() {
 
 }
@@ -86,8 +193,6 @@ int main() {
 
     //Once the user has made the selection call the respective function above to perform the below type of examples.
     //Background is provided along with working samples.
-
-
 
     return 0;
 }
