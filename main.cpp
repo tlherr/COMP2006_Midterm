@@ -200,7 +200,20 @@ void RomanToBase10(RomanNumeral input) {
     cout << "In Base 10 this is: " << total << endl;
 }
 
-void RomanAddition() {
+/**
+ * 1.	Substitute for any subtractives in both values; that is; "uncompact" the Roman values.
+ * 2.	Put the two values together—catenate them.
+ * 3.	Sort the symbols in order from left-to-right with the "largest" symbols on the left.
+ * 4.	Starting with the right end, combine groups of the same symbols that can make a "larger" one and substitute the single larger one.
+ * 5.	Compact the result by substituting subtractives where possible.
+ *
+ * @param first
+ * @param second
+ */
+void RomanAddition(RomanNumeral first, RomanNumeral second) {
+    cout << "Adding: " << first.expression << " to " << second.expression << endl;
+
+
 
 }
 
@@ -237,16 +250,85 @@ void RemoveSubstractives(RomanNumeral &input) {
         }
 
         if(streak==3) {
-            //We have a viable sub
             cout << "Viable Substitution found" << endl;
+
+            if(current=='X') {
+                cout << "Replacing " << input.expression.substr(i-3,i) << endl;
+                input.expression.replace(i-3,i,"XL");
+            }
+
+            if(current=='I') {
+                cout << "Replacing: " << input.expression.substr(i-3,i) << endl;
+                input.expression.replace(i-3,i,"IV");
+            }
+
+            if(current=='C') {
+                cout << "Replacing: " << input.expression.substr(i-3,i) << endl;
+                input.expression.replace(i-3,i,"CD");
+            }
+
         }
     }
 
-
+    cout << "Final Result: " << input.expression << endl;
 }
 
+/**
+ * Find any shortforms and unexpand them
+ *
+ * @param input
+ */
 void AddSubstractives(RomanNumeral &input) {
 
+    //If we have any of the follwing patterns:
+
+    //IV = IIII
+    //IX = VIIII
+    //XL = XXXX
+    //XC = LXXXX
+    //CD = CCCC
+    //CM = DCCCC
+
+    size_t ivmatch = input.expression.find("IV");
+    size_t ixmatch = input.expression.find("IX");
+    size_t xlmatch = input.expression.find("XL");
+    size_t xcmatch = input.expression.find("XC");
+    size_t cdmatch = input.expression.find("CD");
+    size_t cmmatch = input.expression.find("CM");
+
+
+    if(ivmatch!=string::npos) {
+        std::cout << "Found IV at position: " << ivmatch << endl;
+        input.expression.replace(ivmatch, ivmatch+2, "IIII");
+    }
+
+
+    if(ixmatch!=string::npos) {
+        std::cout << "Found IX at position: " << ixmatch << endl;
+        input.expression.replace(ixmatch, ixmatch+2, "VIIII");
+    }
+
+    if(xlmatch!=string::npos) {
+        std::cout << "Found XL at position: " << xlmatch << endl;
+        input.expression.replace(xlmatch, xlmatch+2, "XXXX");
+    }
+
+    if(xcmatch!=string::npos) {
+        std::cout << "Found XC at position: " << xcmatch << endl;
+        input.expression.replace(xcmatch, xcmatch+2, "LXXXX");
+    }
+
+    if(cdmatch!=string::npos) {
+        std::cout << "Found CD at position: " << cdmatch << endl;
+        input.expression.replace(cdmatch, cdmatch+2, "CCCC");
+    }
+
+    if(cmmatch!=string::npos) {
+        std::cout << "Found CM at position: " << cmmatch << endl;
+        input.expression.replace(cmmatch, cmmatch+2, "DCCCC");
+    }
+
+    cout << "Fully Expanded Form: " << input.expression << endl;
 }
 
 /**
@@ -328,7 +410,7 @@ int main() {
             Base10ToRoman(getBase10Input());
             break;
         case 3:
-            RomanAddition();
+            RomanAddition(getRomanInput(), getRomanInput());
             break;
         default:
             cout << "Exiting..." << endl;
