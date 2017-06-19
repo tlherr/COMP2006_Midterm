@@ -17,6 +17,7 @@ struct RomanNumeral {
             char current = expression.at(i);
             if(current=='I'||current=='V'||current=='X'||current=='L'||current=='C'||current=='D'||current=='M') {
                 //Do nothing. Characters are valid
+                cout << "Valid character found at position: " << i << endl;
             } else {
                 cout << "Invalid character found at position: " << i << endl;
                 valid = false;
@@ -107,40 +108,96 @@ int getBase10Input() {
 }
 
 
+
 /**
  * Convert roman numeral into Base 10 integer
  * I	V	X	L	C	D	M
  * 1	5	10	50	100	500	1000
+ *
+ * M CM XC IV = 1000 + 100 + 1000 + 10 + 100 + 1 + 5 = 2216
+ *
+ * Simply add up the values of the Roman symbols. Of course, if a subtractive appears with a I, X, or C to the left
+ * of a "larger" symbol, we need to substitute the pair for the correct numeric value.
+ *
  * @param input RomanNumeral
- * @return int Base 10 equivilent
  */
-int RomanToBase10(RomanNumeral input) {
+void RomanToBase10(RomanNumeral input) {
 
     int total = 0;
     for(unsigned int i=0; i<input.expression.length(); i++) {
         char current = input.expression.at(i);
+        char next = input.expression.at(i+1);
 
         switch(current) {
             case 'I':
-                total+=1;
+                //Check if the next character is V or X (Warning about indexes)
+                if(next=='V') {
+                    //This is actually 4, so add that and skip a character position
+                    total+=4;
+                    i++;
+                } else if(next=='X') {
+                    //This is actually 9, so add that and skip a character position
+                    total+=9;
+                    i++;
+                } else {
+                    total+=1;
+                }
+                break;
             case 'V':
+                cout << "Adding 5" << endl;
                 total+=5;
+                break;
             case 'X':
-                total+=10;
+                //Check if the next character is an L or C
+
+                if(next=='L') {
+                    //This is actually 40, so add that and skip a character position
+                    total+=40;
+                    i++;
+                } else if(next=='C') {
+                    //This is actually 90, so add that and skip a character position
+                    total+=90;
+                    i++;
+                } else {
+                    total+=10;
+                }
+
+                break;
             case 'L':
+                cout << "Adding 50" << endl;
                 total+=50;
+                break;
             case 'C':
-                total+=100;
+                //Check if the next character is an D or M
+
+                if(next=='D') {
+                    //This is actually 400, so add that and skip a character position
+                    total+=400;
+                    i++;
+                } else if(next=='M') {
+                    //This is actually 90, so add that and skip a character position
+                    total+=900;
+                    i++;
+                } else {
+                    total+=100;
+                }
+
+                break;
             case 'D':
+                cout << "Adding 500" << endl;
                 total+=500;
+                break;
             case 'M':
+                cout << "Adding 1000" << endl;
                 total+=1000;
+                break;
             default:
                 cout << "Invalid Character Detected at position " << i << endl;
+                break;
         }
     }
 
-    return total;
+    cout << "In Base 10 this is: " << total << endl;
 }
 
 /**
@@ -181,14 +238,18 @@ int main() {
 
     //Use a switch statement to determine the user input
     switch(selection) {
-        default:
-            cout << "Exiting..." << endl;
-        case 1:
-            RomanToBase10();
+        case 1:;
+            RomanToBase10(getRomanInput());
+            break;
         case 2:
             Base10ToRoman();
+            break;
         case 3:
             RomanAddition();
+            break;
+        default:
+            cout << "Exiting..." << endl;
+            break;
     }
 
     //Once the user has made the selection call the respective function above to perform the below type of examples.
